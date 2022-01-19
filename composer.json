@@ -1,0 +1,23 @@
+{
+    "name": "jeffnys/mvcvoila",
+    "description": "Simple from scratch PHP MVC for students",
+    "authors": [
+        {
+            "name": "Jeff",
+            "email": "contact@jeffnys.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "twig/twig": "^3.1",
+        "ext-pdo": "*"
+    },
+    "require-dev": {
+        "filp/whoops": "^2.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
