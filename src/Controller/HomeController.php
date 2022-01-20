@@ -15,7 +15,6 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        $this->addFlash("color-success", "coucou");
         return $this->twig->render('Home/index.html.twig');
     }
 }
