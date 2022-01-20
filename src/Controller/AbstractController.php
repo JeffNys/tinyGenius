@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use Twig\Environment;
-use Twig\Extension\DebugExtension;
+use Twig\TwigFunction;
 use Twig\Loader\FilesystemLoader;
+use Twig\Extension\DebugExtension;
 
 abstract class AbstractController
 {
@@ -28,5 +29,35 @@ abstract class AbstractController
             ]
         );
         $this->twig->addExtension(new DebugExtension());
+
+        if (isset($_SESSION["user"])) {
+            $this->twig->addGlobal("appUser", $_SESSION["user"]);
+        }
+        $getFlash = new TwigFunction('getFlash', function () {
+            $messages = [];
+            if (isset($_SESSION['flash'])) {
+                // clear messages after first read
+                $messages = $_SESSION['flash'];
+                unset($_SESSION['flash']);
+            }
+            return $messages;
+        });
+        $this->twig->addFunction($getFlash);
+    }
+
+    public function addFlash(string $color, string $message): void
+    {
+        $_SESSION['flash'] = $_SESSION['flash'] ?? [];
+        array_push($_SESSION['flash'], [
+            "color" => $color,
+            "message" => $message,
+        ]);
+    }
+
+
+    public function redirectTo(string $route): void
+    {
+        header("Location: $route");
+        exit;
     }
 }

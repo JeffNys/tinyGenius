@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Model\LevelManager;
+use App\Service\UploadService;
 
 /**
  * Class LevelController
@@ -62,12 +63,30 @@ class LevelController extends AbstractController
         $level = $levelManager->selectOneById($id);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($_FILES['logo']['name']) {
+                $oldLogo = $level['logo'] ?? "";
+                $uploadService = new UploadService();
+                $errorMessage = $uploadService->check($_FILES['logo']);
+                if ($errorMessage) {
+                    $this->addFlash("color-danger", $errorMessage);
+                    $logo = "";
+                } else {
+                    $logo = $uploadService->update($_FILES['logo'], $oldLogo);
+                }
+            } else {
+                $logo = "";
+            }
             $level = [
                 "level" => $_POST['level'],
                 "description" => $_POST['description'],
-                "logo" => $_POST['logo'],
+                "logo" => $logo,
             ];
-            $levelManager->edit($id, $level);
+            if ($levelManager->edit($id, $level)) {
+                $this->addFlash("color-success", "le niveau a été correctement modifié");
+            } else {
+                $this->addFlash("color-danger", "il y a eu un problème lors de l'enregistrement du fichier");
+            }
+            $this->redirectTo("/level");
         }
 
         return $this->twig->render('Level/edit.html.twig', ['level' => $level]);
@@ -87,13 +106,25 @@ class LevelController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $levelManager = new LevelManager();
+            if ($_FILES['logo']) {
+                $uploadeService = new UploadService();
+                $errorMessage = $uploadeService->check($_FILES['logo']);
+                if ($errorMessage) {
+                    $this->addFlash("color-danger", $errorMessage);
+                    $logo = "";
+                } else {
+                    $logo = $uploadeService->add($_FILES['logo']);
+                }
+            } else {
+                $logo = "";
+            }
             $level = [
                 "level" => $_POST['level'],
                 "description" => $_POST['description'],
-                "logo" => $_POST['logo'],
+                "logo" => $logo,
             ];
-            $id = $levelManager->create($level);
-            header('Location:/level/show/' . $id);
+            $id = strval($levelManager->create($level));
+            $this->redirectTo("/level/show/$id");
         }
 
         return $this->twig->render('Level/add.html.twig');
@@ -108,7 +139,13 @@ class LevelController extends AbstractController
     public function delete(int $id)
     {
         $levelManager = new LevelManager();
+        $uploadeService = new UploadService();
+        $level = $levelManager->selectOneById($id);
+        if ($level['logo']) {
+            $uploadeService->delete($level['logo']);
+        }
         $levelManager->delete($id);
-        header('Location:/level/index');
+        $this->addFlash("color-success", "le niveau a été correctement supprimer");
+        $this->redirectTo('/level/index');
     }
 }
