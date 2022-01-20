@@ -1,0 +1,4 @@
+{% set messages = getFlash() %}
+{% for message in messages %}
+	<div class="{{ message.color }}">{{ message.message }}</div>
+{% endfor %}

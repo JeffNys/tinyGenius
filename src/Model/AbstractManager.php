@@ -107,7 +107,7 @@ abstract class AbstractManager
      *  "field2" => "value2",
      * ];
      */
-    public function create(array $modelTable): object
+    public function create(array $modelTable): int
     {
         $fields = [];
         $inter = [];
@@ -129,11 +129,15 @@ abstract class AbstractManager
         $sql = "INSERT INTO $this->table ($fieldsList) VALUES ($interList)";
         $query = $this->pdo->prepare($sql);
         // here we replace all the ? by all the values
-        $query->execute($values);
-        return $query;
+        if ($query->execute($values)) {
+            $id = (int)$this->pdo->lastInsertId();
+        } else {
+            $id = 0;
+        }
+        return $id;
     }
 
-    public function edit(int $id, array $modelTable): object
+    public function edit(int $id, array $modelTable): int
     {
         $fields = [];
         $values = [];
@@ -155,8 +159,10 @@ abstract class AbstractManager
         $sql = "UPDATE `$this->table` SET $fieldsList WHERE `id` =  ?";
         $query = $this->pdo->prepare($sql);
         // here we replace all the ? by all the values
-        $query->execute($values);
-        return $query;
+        if (!$query->execute($values)) {
+            $id = 0;
+        }
+        return $id;
     }
 
     /**

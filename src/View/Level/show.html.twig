@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Détails du niveau{% endblock %}
+
+{% block content %}
+    <h1>Niveau {{ level.level }}</h1>
+    <p>nom du niveau: {{ level.level }}</p>
+    <p>description: {{ level.description }} </p>
+    {% if level.logo %}
+    <img src="/assets/images/upload/{{ level.logo }}" class="image-size" alt="logo du niveau {{ level.level }}">
+    {% else %}
+    <p>il n'y a pas de logo</p>
+    {% endif %}
+    <br>
+    <a href="/level/edit/{{ level.id }}" class="btn btn-warning mt-3 mb-3">Modifier</a>
+    <a href="/level/delete/{{ level.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
+    <br>
+    <a href="/level">Retourner à la liste</a>
+{% endblock %}

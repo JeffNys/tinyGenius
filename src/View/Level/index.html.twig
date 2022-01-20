@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Liste des niveaux{% endblock %}
+
+{% block content %}
+    <h1>Liste des niveaux</h1>
+    <ul>
+        {% for level in levels %}
+            <li><a href="/level/show/{{ level.id }}">{{ level.id }}. {{ level.level }}</a></li>
+        {% else %}
+            <li>Aucun niveau enregistré</li>
+        {% endfor %}
+    </ul>
+    <a href="/level/add" class="btn btn-primary">ajouter un niveau</a>
+{% endblock %}
