@@ -7,7 +7,7 @@ class LessonManager extends AbstractManager
     /**
      *
      */
-    const TABLE = 'level';
+    const TABLE = 'lesson';
 
     /**
      *  Initializes this class.
@@ -17,4 +17,11 @@ class LessonManager extends AbstractManager
         parent::__construct(self::TABLE);
     }
     
+    public function findAllWithLevel(): array
+    {
+        $sql = "SELECT `lesson`.`id`, `lesson`.`name`, `lesson`.`description`, `level`.`level`, `lesson`.`logo`
+        FROM $this->table
+        JOIN `level` ON `lesson`.`level_id` = `level`.`id`";
+        return $this->pdo->query($sql)->fetchAll();
+    }
 }

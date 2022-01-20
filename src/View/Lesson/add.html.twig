@@ -16,7 +16,7 @@
     <div class="form-group">
         <label for="level_id" class="form-label mt-4">Niveau</label>
         <select class="form-select" name="level_id">
-        {%  level in levels %}
+        {% for level in levels %}
             <option value="{{ level.id }}" >{{ level.level }}</option>
         {% endfor %}
         </select>

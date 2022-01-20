@@ -25,7 +25,7 @@ class LessonController extends AbstractController
     public function index()
     {
         $lessonManager = new LessonManager();
-        $lessons = $lessonManager->selectAll();
+        $lessons = $lessonManager->findAllWithLevel();
 
         return $this->twig->render('Lesson/index.html.twig', ['lessons' => $lessons]);
     }
@@ -106,10 +106,8 @@ class LessonController extends AbstractController
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            var_dump($_POST);
-            die;
             $lessonManager = new LessonManager();
-            if ($_FILES['logo']) {
+            if ($_FILES['logo']['name']) {
                 $uploadeService = new UploadService();
                 $errorMessage = $uploadeService->check($_FILES['logo']);
                 if ($errorMessage) {

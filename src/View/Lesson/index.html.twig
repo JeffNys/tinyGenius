@@ -6,19 +6,23 @@
     <h1>Liste des cours</h1>
 
     {% if "ROLE_ADMIN" in appUser.role %}
-        <a href="/lesson/add" class="btn btn-primary">ajouter un cour</a>
+        <a href="/lesson/add" class="btn btn-primary mb-3">ajouter un cour</a>
     {% endif %}
 
+    <div class="row row-cols-xxs-1 row-cols-xs-2 row-cols-sm-3 row-cols-xl-4 row-cols-xxl-5">
     {% for lesson in lessons %}
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
-    <div class="card-header">{{ lesson.name }}</div>
-    <div class="card-body">
-        <h4 class="card-title">{{ lesson.name }}</h4>
-        <p class="card-text">{{ lesson.description }}</p>
-    </div>
-    </div>
-        <li><a href="/lesson/show/{{ lesson.id }}"> {{ lesson.lesson }}</a></li>
+        <div class="col">
+            <div class="card border-primary m-2">
+                <div class="card-header">{{ lesson.level }}</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ lesson.name }}</h4>
+                    <p class="card-text">{{ lesson.description }}</p>
+                    <a href="/lesson/show/{{ lesson.id }}" class="btn btn-primary float-end">Détails</a>
+                </div>
+            </div>
+        </div>
     {% else %}
-        <li>Aucun niveau enregistré</li>
+        <p>Aucun cours enregistré</p>
     {% endfor %}
+    </div>
 {% endblock %}
