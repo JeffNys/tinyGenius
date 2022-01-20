@@ -15,9 +15,6 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        $access = $this->isGranted("ROLE_GEST");
-        return $this->twig->render('Home/index.html.twig', [
-            'access' => $access,
-        ]);
+        return $this->twig->render('Home/index.html.twig');
     }
 }

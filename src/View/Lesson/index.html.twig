@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Liste des cours{% endblock %}
+
+{% block content %}
+    <h1>Liste des cours</h1>
+
+    {% if "ROLE_ADMIN" in appUser.role %}
+        <a href="/lesson/add" class="btn btn-primary">ajouter un cour</a>
+    {% endif %}
+
+    {% for lesson in lessons %}
+    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card-header">{{ lesson.name }}</div>
+    <div class="card-body">
+        <h4 class="card-title">{{ lesson.name }}</h4>
+        <p class="card-text">{{ lesson.description }}</p>
+    </div>
+    </div>
+        <li><a href="/lesson/show/{{ lesson.id }}"> {{ lesson.lesson }}</a></li>
+    {% else %}
+        <li>Aucun niveau enregistré</li>
+    {% endfor %}
+{% endblock %}
