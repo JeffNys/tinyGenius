@@ -21,6 +21,26 @@
         <li class="nav-item">
           <a class="nav-link" href="/prix">Prix</a>
         </li>
+        {% if appUser %}
+        {% if "ROLE_ADMIN" in appUser.role %}
+        <li class="nav-item">
+          <a class="nav-link" href="/admin">Admin</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="/user/profile">Profil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-light text-black" href="/user/logout">Deconnexion</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/user/subscribe">Inscription</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-secondary text-black" href="/user/login">Connexion</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>

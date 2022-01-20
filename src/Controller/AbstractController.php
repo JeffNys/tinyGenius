@@ -54,10 +54,19 @@ abstract class AbstractController
         ]);
     }
 
-
     public function redirectTo(string $route): void
     {
         header("Location: $route");
         exit;
+    }
+
+    public function isGranted(string $role): bool
+    {
+        $access = false;
+        $userRoles = $_SESSION['user']['role'] ?? [];
+        if (in_array($role, $userRoles)) {
+            $access = true;
+        }
+        return $access;
     }
 }

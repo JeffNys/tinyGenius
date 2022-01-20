@@ -7,6 +7,7 @@ class UploadService
 
     public function __construct()
     {
+        // ROOT was define in the config folder
         $this->uploadFolder = ROOT . "/assets/images/upload/";
     }
 

@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Information de votre compte{% endblock %}
+
+{% block content %}
+    <h1>Compte: {{ user.email }}</h1>
+    <p>Prénom : {{ user.firstname }}</p>
+    <p>Nom : {{ user.lastname }} </p>
+    <p>adresse de courriel : {{ user.email }} </p>
+    <p>Télephone : {{ user.phone }} </p>
+    <p>anniversaire : {{ user.birthday|date("d/m/Y") }} </p>
+    <br>
+    <a href="/user/edit" class="btn btn-warning mt-3 mb-3">Modifier</a>
+{% endblock %}
