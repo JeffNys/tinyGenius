@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+    <h1>Connexion</h1>
+    <form method="post">
+    <div>
+        <label for="email" class="form-label mt-4">Courriel : </label>
+        <input type="email" value="{{ user.email }}" name="email" class="form-control">
+    </div>
+    <div>
+        <label for="password" class="form-label mt-4">Mot de passe : </label>
+        <input type="password" value="{{ user.password }}" name="password" class="form-control">
+    </div>
+    <input type="submit" class="btn btn-primary mt-3" value="Connexion">
+</form>
+    <p class="mt-5">pas encore de compte ? 
+    <a href="/user/subscribe" class="btn btn-secondary text-black">s'enregistrer</a></p>
+{% endblock %}

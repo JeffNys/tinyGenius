@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(255) NOT NULL,
   `validate` TINYINT NULL,
   `phone` VARCHAR(45) NULL,
+  `role` JSON NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
