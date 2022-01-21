@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Liste des profs{% endblock %}
+
+{% block content %}
+    <h1>Liste des profs</h1>
+    <ul>
+    {% for teacher in teachers %}
+        <li><a href="/teacher/show/{{ teacher.id }}"> {{ teacher.id }} - {{ teacher.title }} : {{ teacher.firstname }} {{ teacher.lastname }} </li></a>
+    {% else %}
+        <li>Aucun prof enregistré</li>  
+    {% endfor %}
+    </ul>
+    <a href="/teacher/add" class="btn btn-primary mb-3">ajouter un prof</a>
+{% endblock %}

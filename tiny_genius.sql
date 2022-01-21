@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `assist` ;
 DROP TABLE IF EXISTS `offer` ;
 DROP TABLE IF EXISTS `lesson` ;
 DROP TABLE IF EXISTS `level` ;
-DROP TABLE IF EXISTS `Teacher` ;
+DROP TABLE IF EXISTS `teacher` ;
 DROP TABLE IF EXISTS `user` ;
 
 -- -----------------------------------------------------
@@ -24,18 +24,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Teacher`
+-- Table `teacher`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `Teacher` (
+CREATE TABLE IF NOT EXISTS `teacher` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
   `description` LONGTEXT NULL,
   `user_id` INT NOT NULL,
   `image` VARCHAR(125) NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Teacher_user`
-    FOREIGN KEY (`id`)
+  CONSTRAINT `fk_teacher_user`
+    FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `offer` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_offer_teacher`
     FOREIGN KEY (`teacher_id`)
-    REFERENCES `Teacher` (`id`)
+    REFERENCES `teacher` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_offer_lesson`
@@ -131,3 +131,9 @@ CREATE TABLE IF NOT EXISTS `message` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+INSERT INTO `user`
+(`firstname`, `lastname`, `birthday`, `email`, `password`, `validate`, `phone`, `role`)
+VALUES 
+('Jeff', 'Nys', '1980-04-02', 'contact@fafache.net', '$argon2id$v=19$m=65536,t=4,p=1$TVovRk1yVmlFTndGS1pQeg$NaJiovxQLnCvecy0ma9Bl19W4SazMMGqlSTC8UWrk5Y', 1, '01 23 45 67 89', '["ROLE_USER", "ROLE_ADMIN"]');
