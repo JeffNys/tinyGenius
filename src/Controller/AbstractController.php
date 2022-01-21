@@ -68,7 +68,7 @@ abstract class AbstractController
             $access = true;
         }
 
-        if ($redirect) {
+        if ($redirect && !$access) {
             $url = $_SERVER['HTTP_HOST'] . $redirect;
             $this->addFlash("color-warning", "vous n'avez pas accès à cette page, vous avez été redirigé sur $url");
             $this->redirectTo($redirect);
