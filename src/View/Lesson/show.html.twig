@@ -4,13 +4,14 @@
 
 {% block content %}
     <h1> {{ lesson.lesson }}</h1>
-    <p>nom du niveau: {{ lesson.lesson }}</p>
-    <p>description: {{ lesson.description }} </p>
+    <p>nom du cours : {{ lesson.name }}</p>
+    <p>description : {{ lesson.description }} </p>
     {% if lesson.logo %}
     <img src="/assets/images/upload/{{ lesson.logo }}" class="image-size" alt="logo du niveau {{ lesson.lesson }}">
     {% else %}
     <p>il n'y a pas de logo</p>
     {% endif %}
+    <p>niveau du cours : {{ lesson.level }} </p>
     <br>
     <a href="/lesson/edit/{{ lesson.id }}" class="btn btn-warning mt-3 mb-3">Modifier</a>
     <a href="/lesson/delete/{{ lesson.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
