@@ -24,8 +24,14 @@
         {% endfor %}
         </select>
     </div>
+    <p class="mt-4">Logo :</p>
+    {% if lesson.logo != "" %}
+    <img src="/assets/images/upload/{{ lesson.logo }}" alt="logo du niveau {{ lesson.level }}" class="image-size mt-3">
+    {% else %}
+    <p>il n'y a pas de logo actuellement pour ce cours</p>
+    {% endif %}
     <div class="form-group">
-        <label for="logo" class="form-label mt-4">Logo :</label>
+        <label for="logo" class="form-label mt-4">Télecharger un autre logo :</label>
         <input class="form-control" type="file" name="logo">
     </div>
     <input type="submit" class="btn btn-primary mt-3 mb-3" value="Modifier le cours">

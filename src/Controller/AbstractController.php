@@ -60,13 +60,20 @@ abstract class AbstractController
         exit;
     }
 
-    public function isGranted(string $role): bool
+    public function isGranted(string $role, string $redirect = ""): bool
     {
         $access = false;
         $userRoles = $_SESSION['user']['role'] ?? [];
         if (in_array($role, $userRoles)) {
             $access = true;
         }
+
+        if ($redirect) {
+            $url = $_SERVER['HTTP_HOST'] . $redirect;
+            $this->addFlash("color-warning", "vous n'avez pas accès à cette page, vous avez été redirigé sur $url");
+            $this->redirectTo($redirect);
+        }
+
         return $access;
     }
 }

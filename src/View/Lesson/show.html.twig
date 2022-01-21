@@ -13,8 +13,12 @@
     {% endif %}
     <p>niveau du cours : {{ lesson.level }} </p>
     <br>
-    <a href="/lesson/edit/{{ lesson.id }}" class="btn btn-warning mt-3 mb-3">Modifier</a>
-    <a href="/lesson/delete/{{ lesson.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
+    
+    {% if "ROLE_ADMIN" in appUser.role %}
+        <a href="/lesson/edit/{{ lesson.id }}" class="btn btn-warning mt-3 mb-3">Modifier</a>
+        <a href="/lesson/delete/{{ lesson.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
+    {% endif %}
+    
     <br>
-    <a href="/lesson">Retourner à la liste</a>
+    <a href="/lesson">Retourner à la liste des cours</a>
 {% endblock %}

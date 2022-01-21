@@ -60,6 +60,7 @@ class LessonController extends AbstractController
      */
     public function edit(int $id): string
     {
+        $this->isGranted("ROLE_ADMIN", "/");
         $lessonManager = new LessonManager();
         $lesson = $lessonManager->selectOneById($id);
 
@@ -109,7 +110,7 @@ class LessonController extends AbstractController
      */
     public function add()
     {
-
+        $this->isGranted("ROLE_ADMIN", "/");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $lessonManager = new LessonManager();
             if ($_FILES['logo']['name']) {
@@ -148,6 +149,7 @@ class LessonController extends AbstractController
      */
     public function delete(int $id)
     {
+        $this->isGranted("ROLE_ADMIN", "/");
         $lessonManager = new LessonManager();
         $uploadeService = new UploadService();
         $lesson = $lessonManager->selectOneById($id);
