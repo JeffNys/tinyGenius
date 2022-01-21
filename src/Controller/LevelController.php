@@ -106,7 +106,7 @@ class LevelController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $levelManager = new LevelManager();
-            if ($_FILES['logo']) {
+            if ($_FILES['logo']['name']) {
                 $uploadeService = new UploadService();
                 $errorMessage = $uploadeService->check($_FILES['logo']);
                 if ($errorMessage) {

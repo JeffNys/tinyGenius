@@ -25,7 +25,7 @@ class LessonController extends AbstractController
     public function index()
     {
         $lessonManager = new LessonManager();
-        $lessons = $lessonManager->selectAll();
+        $lessons = $lessonManager->findAllWithLevel();
 
         return $this->twig->render('Lesson/index.html.twig', ['lessons' => $lessons]);
     }
@@ -43,7 +43,7 @@ class LessonController extends AbstractController
     public function show(int $id)
     {
         $lessonManager = new LessonManager();
-        $lesson = $lessonManager->selectOneById($id);
+        $lesson = $lessonManager->findOneWithLevel($id);
 
         return $this->twig->render('Lesson/show.html.twig', ['lesson' => $lesson]);
     }
@@ -60,6 +60,7 @@ class LessonController extends AbstractController
      */
     public function edit(int $id): string
     {
+        $this->isGranted("ROLE_ADMIN", "/");
         $lessonManager = new LessonManager();
         $lesson = $lessonManager->selectOneById($id);
 
@@ -78,19 +79,24 @@ class LessonController extends AbstractController
                 $logo = "";
             }
             $lesson = [
-                "lesson" => $_POST['lesson'],
+                "name" => $_POST['name'],
                 "description" => $_POST['description'],
+                "level_id" => $_POST['level_id'],
                 "logo" => $logo,
             ];
             if ($lessonManager->edit($id, $lesson)) {
-                $this->addFlash("color-success", "le niveau a été correctement modifié");
+                $this->addFlash("color-success", "le cours a été correctement modifié");
             } else {
-                $this->addFlash("color-danger", "il y a eu un problème lors de l'enregistrement du fichier");
+                $this->addFlash("color-danger", "il y a eu un problème lors de l'enregistrement du cours");
             }
-            $this->redirectTo("/lesson");
+            $this->redirectTo("/lesson/show/$id");
         }
-
-        return $this->twig->render('Lesson/edit.html.twig', ['lesson' => $lesson]);
+        $levelManager = new LevelManager();
+        $levels = $levelManager->selectAll();
+        return $this->twig->render('Lesson/edit.html.twig', [
+            'lesson' => $lesson,
+            'levels' => $levels,
+        ]);
     }
 
 
@@ -104,12 +110,10 @@ class LessonController extends AbstractController
      */
     public function add()
     {
-
+        $this->isGranted("ROLE_ADMIN", "/");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            var_dump($_POST);
-            die;
             $lessonManager = new LessonManager();
-            if ($_FILES['logo']) {
+            if ($_FILES['logo']['name']) {
                 $uploadeService = new UploadService();
                 $errorMessage = $uploadeService->check($_FILES['logo']);
                 if ($errorMessage) {
@@ -145,6 +149,7 @@ class LessonController extends AbstractController
      */
     public function delete(int $id)
     {
+        $this->isGranted("ROLE_ADMIN", "/");
         $lessonManager = new LessonManager();
         $uploadeService = new UploadService();
         $lesson = $lessonManager->selectOneById($id);

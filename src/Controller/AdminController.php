@@ -15,11 +15,7 @@ class AdminController extends AbstractController
      */
     public function index()
     {
-        $access = $this->isGranted("ROLE_ADMIN");
-        if (!$access) {
-            $this->addFlash("color-warning", "vous n'avez pas accès à cette page");
-            $this->redirectTo("/");
-        }
+        $this->isGranted("ROLE_ADMIN", "/");
         return $this->twig->render('Admin/index.html.twig');
     }
 }

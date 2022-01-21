@@ -1,27 +1,41 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Modifier un niveau{% endblock %}
+{% block title %}Modifier un cours{% endblock %}
 
 {% block content %}
-    <h1>Modifier un niveau</h1>
+    <h1>Modifier un cours</h1>
     <form method="post" enctype="multipart/form-data">
     <div>
-        <label for="lesson" class="form-label mt-4">Niveau : </label>
-        <input type="text" value="{{ lesson.lesson }}" name="lesson" class="form-control">
+        <label for="name" class="form-label mt-4">Nom du cours : </label>
+        <input type="text" value="{{ lesson.name }}" name="name" class="form-control">
     </div>
     <div class="form-group">
         <label for="description" class="form-label mt-4">Description :</label>
         <textarea class="form-control" name="description" rows="3">{{ lesson.description }}</textarea>
     </div>
+    <div class="form-group">
+        <label for="level_id" class="form-label mt-4">Niveau</label>
+        <select class="form-select" name="level_id">
+        {% for level in levels %}
+            <option value="{{ level.id }}" 
+            {% if level.id == lesson.level_id %}selected{% endif %}
+            
+            >{{ level.level }}</option>
+        {% endfor %}
+        </select>
+    </div>
+    <p class="mt-4">Logo :</p>
     {% if lesson.logo != "" %}
-    <img src="/assets/images/upload/{{ lesson.logo }}" alt="logo du niveau {{ lesson.lesson }}" class="image-size mt-3">
+    <img src="/assets/images/upload/{{ lesson.logo }}" alt="logo du niveau {{ lesson.level }}" class="image-size mt-3">
+    {% else %}
+    <p>il n'y a pas de logo actuellement pour ce cours</p>
     {% endif %}
     <div class="form-group">
-        <label for="logo" class="form-label mt-4">Logo :</label>
+        <label for="logo" class="form-label mt-4">Télecharger un autre logo :</label>
         <input class="form-control" type="file" name="logo">
     </div>
-    <input type="submit" class="btn btn-primary mt-3" value="Modifier le niveau">
+    <input type="submit" class="btn btn-primary mt-3 mb-3" value="Modifier le cours">
 </form>
     
-<a href="/lesson" class="mt-3">retourner à la liste</a>
+<a href="/lesson" class="mt-3">retourner à la liste des cours</a>
 {% endblock %}
