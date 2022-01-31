@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\TeacherManager;
 use App\Model\UserManager;
+use App\Service\TeacherRoleService;
 use App\Service\UploadService;
 
 /**
@@ -52,6 +53,14 @@ class TeacherController extends AbstractController
     {
         $teacherManager = new TeacherManager();
         $teacher = $teacherManager->findOneWithUser($id);
+        if (!$teacher) {
+            $this->addFlash("color-warning", "il n'y a pas de prof a cette adresse");
+            if ($this->isGranted("ROLE_ADMIN")) {
+                $this->redirectTo("/teacher/list");
+            } else {
+                $this->redirectTo("/teacher");
+            }
+        }
 
         return $this->twig->render('Teacher/show.html.twig', ['teacher' => $teacher]);
     }
@@ -105,24 +114,23 @@ class TeacherController extends AbstractController
                 ];
                 if ($teacherManager->edit($id, $teacher)) {
                     if ($userId != $oldUserID) {
+                        $teacherRoleService = new TeacherRoleService();
                         $userManager = new UserManager();
-                        $user = $userManager->selectOneById($userId);
-                        $role = json_decode($user["role"]);
-                        array_push($role, "ROLE_TEACHER");
-                        $userRole = ["role" => json_encode($role)];
-                        $userManager->edit($userId, $userRole);
                         $oldUser = $userManager->selectOneById($oldUserID);
-                        $oldUserRole = json_decode($oldUser["role"]);
-                        $oldUserNewRole = [];
-                        foreach ($oldUserRole as $oldRole) {
-                            if ($oldRole != "ROLE_TEACHER") {
-                                $oldUserNewRole[] = $oldRole;
-                            }
+                        if ($teacherRoleService->deleteTeacherRole($oldUserID)) {
+                            $this->addFlash("color-success", "l'utilisateur {$oldUser['firstname']} {$oldUser['lastname']} reste un prof (depuis un autre profil de prof");
+                        } else {
+                            $this->addFlash("color-success", "l'utilisateur {$oldUser['firstname']} {$oldUser['lastname']} n'est plus un prof");
                         }
-                        $oldUserRole = ["role" => json_encode($oldUserNewRole)];
-                        $userManager->edit($oldUserID, $oldUserRole);
+
+                        $user = $userManager->selectOneById($userId);
+                        if ($teacherRoleService->addTeacherRole($userId)) {
+                            $this->addFlash("color-success", "l'utilisateur {$user['firstname']} {$user['lastname']} est un prof");
+                        } else {
+                            $this->addFlash("color-danger", "il y a eu un problème lors de la mise à jours de l'utilisateur {$user['firstname']} {$user['lastname']}");
+                        }
                     }
-                    $this->addFlash("color-success", "le niveau a été correctement modifié");
+                    $this->addFlash("color-success", "le prof a été correctement modifié");
                     $this->redirectTo("/teacher/show/$id");
                 } else {
                     $this->addFlash("color-danger", "il y a eu un problème lors de l'enregistrement du fichier");
@@ -181,23 +189,22 @@ class TeacherController extends AbstractController
             }
             if (!$error) {
                 $userId = intval($_POST["user_id"]);
-                    $teacher = [
+                $teacher = [
                     "title" => $_POST['title'],
                     "description" => $_POST['description'],
                     "user_id" => $userId,
                     "image" => $image,
                 ];
                 $id = strval($teacherManager->create($teacher));
-                $userManager = new UserManager();
-                $user = $userManager->selectOneById($userId);
-                $role = json_decode($user["role"]);
-                array_push($role, "ROLE_TEACHER");
-                $userRole = ["role" => json_encode($role)];
-                $userManager->edit($userId, $userRole);
+                $teacherRoleService = new TeacherRoleService();
+                if (!$teacherRoleService->addTeacherRole($userId)) {
+                    $this->addFlash("color-warning", "il y a eu un problème lors de la mise à jour de l'utilisateur");
+                } else {
+                    $this->addFlash("color-success", "l'utilisateur est enregistré en tant que prof");
+                }
                 $this->addFlash("color-success", "le profil du prof a été correctement créé");
                 $this->redirectTo("/teacher/show/$id");
             }
-            
         }
 
 
@@ -223,8 +230,18 @@ class TeacherController extends AbstractController
         if ($teacher['image']) {
             $uploadeService->delete($teacher['image']);
         }
+        $userId = $teacher["user_id"];
+
         $teacherManager->delete($id);
-        $this->addFlash("color-success", "le niveau a été correctement supprimer");
+        $this->addFlash("color-success", "le profil de profs a été correctement supprimer");
+
+        $teacherRoleService = new TeacherRoleService();
+        if ($teacherRoleService->deleteTeacherRole($userId)) {
+            $this->addFlash("color-success", "l'utilisateur est encore un prof (avec un autre profil de prof)");
+        } else {
+            $this->addFlash("color-warning", "l'utilisateur n'est plus un prof");
+        }
+
         $this->redirectTo('/teacher/list');
     }
 }

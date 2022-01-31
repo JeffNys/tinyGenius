@@ -3,3 +3,4 @@
 *.cache
 db.php
 .idea
+/public/assets/images/upload/

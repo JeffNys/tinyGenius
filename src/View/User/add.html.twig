@@ -1,11 +1,10 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Modifier mon profil{% endblock %}
+{% block title %}Ajouter un utilisateur{% endblock %}
 
 {% block content %}
-    <h1>Modifier mon profil</h1>
+    <h1>Ajouter un utilisateur</h1>
     <form method="post">
-    <input type="hidden" value="{{ user.id }}" name="id">
     <div>
         <label for="firstname" class="form-label mt-4">Prénom : </label>
         <input type="text" value="{{ user.firstname }}" name="firstname" class="form-control">
@@ -24,32 +23,12 @@
     </div>
     <div>
         <label for="password" class="form-label mt-4">Mot de passe : </label>
-        <input type="password" name="password" placeholder="laisser vide si non modifié" class="form-control">
+        <input type="password" value="{{ user.password }}" name="password" class="form-control">
     </div>
     <div>
         <label for="birthday" class="form-label mt-4">Anniversaire : </label>
         <input type="date" value="{{ user.birthday }}" name="birthday" class="form-control">
     </div>
-    {% if "ROLE_ADMIN" in appUser.role %}
-    <label for="labels" class="form-label mt-4">Roles :</label>
-    <div class="form-check form-switch">
-        {% for role in roles %}
-        <label class="form-check-label">
-            <input type="radio" class="form-check-input" type="checkbox" name="{{ role }}" value="on"
-            {% if role in user.role %}checked=""{% endif %}
-            >
-            {{ role }}
-        </label> <br>
-        {% endfor %}
-    </div>
-    {% endif %}
-    <input type="submit" class="btn btn-primary mt-3 mb-3" value="Modifier">
+    <input type="submit" class="btn btn-primary mt-3 mb-3" value="Enregistrer">
 </form>
-
-{% if "ROLE_TEACHER" in user.role %}
-    <a href="/teacher/show/{{ user.id }}" class="btn btn-primary">voir le profil de l'enseignant</a>
-{% endif %}
-{% if "ROLE_ADMIN" in appUser.role %}
-    <a href="/user/delete/{{ user.id }}" class="btn btn-danger">supprimer cet utilisateur</a>
-{% endif %}
 {% endblock %}
