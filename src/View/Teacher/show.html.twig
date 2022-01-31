@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Détails du prof{% endblock %}
+
+{% block content %}
+    <h1> {{ teacher.firstname }} {{ teacher.lastname }}</h1>
+    <p>Pseudo du prof : {{ teacher.title }}</p>
+    <p>description : {{ teacher.description }} </p>
+    {% if teacher.image %}
+    <img src="/assets/images/upload/{{ teacher.image }}" class="image-size" alt="photo de {{ teacher.title }}">
+    {% else %}
+    <p>il n'y a pas de photo</p>
+    {% endif %}
+    <p>Adresse de couriel : {{ teacher.email }} </p>
+    <p>Numéro de télephone : {{ teacher.phone }}</p>
+    <br>
+    
+    {% if "ROLE_ADMIN" in appUser.role %}
+        <a href="/teacher/edit/{{ teacher.id }}" class="btn btn-warning mt-3 mb-3">Modifier</a>
+        <a href="/teacher/delete/{{ teacher.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
+    {% endif %}
+    
+    <br>
+    <a href="/teacher">Retourner à la liste des cours</a>
+{% endblock %}

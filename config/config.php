@@ -17,3 +17,5 @@ define('APP_CACHE_PATH', __DIR__ . '/../temp/cache/');
 
 define('HOME_PAGE', 'home/index');
 define('ROOT', $_SERVER['DOCUMENT_ROOT']);
+
+define('ROLE', ["ROLE_USER", "ROLE_ADMIN", "ROLE_TEACHER"]);

@@ -16,5 +16,12 @@ class UserManager extends AbstractManager
     {
         parent::__construct(self::TABLE);
     }
-    
+
+    public function selectAllOrdered(): array
+    {
+        $sql = "SELECT *
+        FROM $this->table
+        ORDER BY lastname ASC";
+        return $this->pdo->query($sql)->fetchAll();
+    }
 }

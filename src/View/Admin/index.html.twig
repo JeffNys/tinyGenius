@@ -3,6 +3,64 @@
 {% block content %}
     <h1>Bienvenu sur la page admin</h1>
 
-    {{ dump(appUser) }}
+    <div class="row row-cols-xxs-1 row-cols-xs-2 row-cols-sm-3 row-cols-xl-4 row-cols-xxl-5">
+        
+
+        <div class="col">
+            <div class="card border-primary m-2">
+                <div class="card-header">CRUD level</div>
+                <div class="card-body">
+                    <h4 class="card-title">Gérer les niveaux</h4>
+                    <p class="card-text">ici il est possible de gérer les différents niveaux des cours</p>
+                    <a href="/level" class="btn btn-primary float-end">Liste des niveaux</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card border-primary m-2">
+                <div class="card-header">CRUD lesson</div>
+                <div class="card-body">
+                    <h4 class="card-title">Gérer les cours</h4>
+                    <p class="card-text">ici il est possible de gérer les différents des cours</p>
+                    <a href="/lesson" class="btn btn-primary float-end">Liste des cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card border-primary m-2">
+                <div class="card-header">CRUD teacher</div>
+                <div class="card-body">
+                    <h4 class="card-title">Gérer les profs</h4>
+                    <p class="card-text">ici il est possible de gérer les profs</p>
+                    <a href="/teacher/list" class="btn btn-primary float-end">Liste des profs</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card border-primary m-2">
+                <div class="card-header">CRUD user</div>
+                <div class="card-body">
+                    <h4 class="card-title">Gérer les utilisateurs</h4>
+                    <p class="card-text">ici il est possible de gérer les comptes des utilisateurs</p>
+                    <a href="/user/list" class="btn btn-primary float-end">Liste des utilisateurs</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card border-primary m-2">
+                <div class="card-header">CRUD message</div>
+                <div class="card-body">
+                    <h4 class="card-title">Gérer les notes des élèves</h4>
+                    <p class="card-text">ici il est possible de gérer les différents notes et messages assignés aux élèves</p>
+                    <a href="/message/list" class="btn btn-primary float-end">Liste des messages</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
     
 {% endblock %}

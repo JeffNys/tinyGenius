@@ -1,0 +1,17 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block content %}
+    <h1>Liste des utilisateurs</h1>
+    
+    <ul>
+        {% for user in users %}
+            <a href="/user/edit/{{ user.id }}">
+                <li>{{ user.id }}. {{ user.lastname }} {{ user.firstname }} - {{ user.email }} </li>
+            </a>
+        {% endfor %}
+    </ul>
+
+    <a href="/user/add" class="btn btn-primary">Ajouter un utilisateur</a>
+{% endblock %}

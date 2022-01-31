@@ -18,9 +18,7 @@
         <select class="form-select" name="level_id">
         {% for level in levels %}
             <option value="{{ level.id }}" 
-            {% if level.id == lesson.level_id %}selected{% endif %}
-            
-            >{{ level.level }}</option>
+            {% if level.id == lesson.level_id %}selected{% endif %}>{{ level.level }}</option>
         {% endfor %}
         </select>
     </div>
