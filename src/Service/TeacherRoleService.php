@@ -7,18 +7,24 @@ use App\Model\UserManager;
 
 class TeacherRoleService
 {
+    protected object $userManager;
+
+    public function __construct()
+    {
+        $this->userManager = new UserManager();
+    }
+
     public function addTeacherRole(int $userId): bool
     {
         $finish = false;
 
-        $userManager = new UserManager();
-        $user = $userManager->selectOneById($userId);
+        $user = $this->userManager->selectOneById($userId);
         if ($user) {
             if (!$this->checkTeacherRole($userId)) {
                 $role = json_decode($user["role"]);
                 array_push($role, "ROLE_TEACHER");
                 $userRole = ["role" => json_encode($role)];
-                $userManager->edit($userId, $userRole);
+                $this->userManager->edit($userId, $userRole);
             }
             $finish = true;
         }
@@ -29,8 +35,7 @@ class TeacherRoleService
     {
         $itIsTeacher = false;
 
-        $userManager = new UserManager();
-        $user = $userManager->selectOneById($userId);
+        $user = $this->userManager->selectOneById($userId);
         if ($user) {
             $role = json_decode($user["role"]);
             if (in_array("ROLE_TEACHER", $role)) {
@@ -42,9 +47,8 @@ class TeacherRoleService
 
     public function deleteTeacherRole(int $userId): int
     {
-        $userManager = new UserManager();
         $teacherManager = new TeacherManager();
-        $user = $userManager->selectOneById($userId);
+        $user = $this->userManager->selectOneById($userId);
         if (!$user) {
             $userId = 0;
         } else {
@@ -61,7 +65,7 @@ class TeacherRoleService
                     }
                 }
                 $userRole = ["role" => json_encode($userNewRole)];
-                $userManager->edit($userId, $userRole);
+                $this->userManager->edit($userId, $userRole);
                 $userId = 0; // this user is no longer a teacher
             }
         }
