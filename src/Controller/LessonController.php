@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
-use App\Model\LessonManager;
 use App\Model\LevelManager;
+use App\Model\OfferManager;
+use App\Model\LessonManager;
+use App\Model\TeacherManager;
 use App\Service\UploadService;
 
 /**
@@ -45,7 +47,12 @@ class LessonController extends AbstractController
         $lessonManager = new LessonManager();
         $lesson = $lessonManager->findOneWithLevel($id);
 
-        return $this->twig->render('Lesson/show.html.twig', ['lesson' => $lesson]);
+        $teachers = $lessonManager->findTeachersforLesson($id);
+
+        return $this->twig->render('Lesson/show.html.twig', [
+            'lesson' => $lesson,
+            'teachers' => $teachers,
+        ]);
     }
 
 
@@ -159,5 +166,85 @@ class LessonController extends AbstractController
         $lessonManager->delete($id);
         $this->addFlash("color-success", "le niveau a été correctement supprimer");
         $this->redirectTo('/lesson/index');
+    }
+
+    public function addteacher(int $lessonId = 0)
+    {
+        $this->isGranted("ROLE_ADMIN", "/lesson");
+        $lessonManager = new LessonManager();
+        $offer = [
+            "teacher_id" => "",
+            "lesson_id" => $lessonId,
+        ];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $error = false;
+            if (!$_POST["teacher_id"]) {
+                $error = true;
+                $this->addFlash("color-danger", "il est obligatoire de choisir un prof");
+            }
+            $lesson = $lessonManager->selectOneById($_POST["lesson_id"]);
+            if (!$lesson) {
+                $error = true;
+                $this->addFlash("color-danger", "il y a un problème avec l'enregistrement de la lesson, veuillez recommencer la procédure");
+                $this->redirectTo("/lesson");
+            }
+            if (!$error) {
+                $lessonId = $_POST["lesson_id"];
+                $offer = [
+                    "teacher_id" => $_POST["teacher_id"],
+                    "lesson_id" => $_POST["lesson_id"],
+                ];
+                $offerManager = new OfferManager();
+                if ($offerManager->create($offer)) {
+                    $this->addFlash("color-success", "le prof a été correctement assignée");
+                    $this->redirectTo("/lesson/show/$lessonId");
+                }
+            }
+        }
+        $lesson = $lessonManager->selectOneById($lessonId);
+        $teacherManager = new TeacherManager();
+        $teachers = $teacherManager->findAllWithUser();
+        return $this->twig->render('Lesson/addteacher.html.twig', [
+            "offer" => $offer,
+            "teachers" => $teachers,
+            "lesson" => $lesson,
+        ]);
+    }
+
+    public function delteacher(int $lessonId = 0)
+    {
+        $this->isGranted("ROLE_ADMIN", "/lesson");
+        $lessonManager = new LessonManager();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $error = false;
+            if (!$_POST["offer_id"]) {
+                $error = true;
+                $this->addFlash("color-danger", "il est obligatoire de choisir un prof");
+            }
+            $lesson = $lessonManager->selectOneById($_POST["lesson_id"]);
+            if (!$lesson) {
+                $error = true;
+                $this->addFlash("color-danger", "il y a un problème avec l'identification du cours, veuillez recommencer la procédure");
+                $this->redirectTo("/lesson");
+            }
+            if (!$error) {
+                $offerManager = new OfferManager();
+                if ($offerManager->delete($_POST["offer_id"])) {
+                    $this->addFlash("color-success", "le prof a été correctement retiré");
+                } else {
+                    $this->addFlash("color-danger", "il y a eu un problème lors du déassignation du prof");
+                }
+
+                $this->redirectTo("/lesson/show/$lessonId");
+            }
+        }
+        $lesson = $lessonManager->selectOneById($lessonId);
+
+        $teachers = $lessonManager->findTeachersforLesson($lessonId);
+        return $this->twig->render('Lesson/delteacher.html.twig', [
+            "teachers" => $teachers,
+            "lesson" => $lesson,
+        ]);
     }
 }

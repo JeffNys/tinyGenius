@@ -19,7 +19,7 @@ class TeacherManager extends AbstractManager
 
     public function findAllWithUser(): array
     {
-        $sql = "SELECT `teacher`.`id`, `teacher`.`title`, `teacher`.`description`, `user`.`firstname`, `user`.`lastname`, `user`.`role`, `teacher`.`image`
+        $sql = "SELECT `teacher`.`id`, `teacher`.`title`, `teacher`.`description`, `user`.`firstname`, `user`.`lastname`, `user`.`email`, `user`.`role`, `teacher`.`image`
         FROM $this->table
         JOIN `user` ON `teacher`.`user_id` = `user`.`id`";
         return $this->pdo->query($sql)->fetchAll();

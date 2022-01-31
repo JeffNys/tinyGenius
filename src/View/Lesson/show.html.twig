@@ -19,6 +19,22 @@
         <a href="/lesson/delete/{{ lesson.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
     {% endif %}
     
+    <h2>Profs proposés :</h2>
+    <ul>
+        {% for teacher in teachers %}
+        <a href="/assist/add/{{ teacher.offer_id }}">
+        <li>{{ teacher.firstname }} {{ teacher.lastname }} - {{ teacher.email }}</li>
+        </a>
+        {% else %}
+        <li>ce cour n'est dispensé par aucun prof actuellement</li>
+        {% endfor %}
+    </ul>
+    
+    {% if "ROLE_ADMIN" in appUser.role %}
+        <a href="/lesson/addteacher/{{ lesson.id }}" class="btn btn-warning mt-3 mb-3">assigner un prof</a>
+        <a href="/lesson/delteacher/{{ lesson.id}}" class="btn btn-danger mt-3 mb-3">supprimer un prof</a>
+    {% endif %}
+
     <br>
     <a href="/lesson">Retourner à la liste des cours</a>
 {% endblock %}
