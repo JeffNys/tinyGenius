@@ -294,4 +294,41 @@ class TeacherController extends AbstractController
             "lessons" => $lessons,
         ]);
     }
+
+    public function dellesson(int $teacherId = 0)
+    {
+        $this->isGranted("ROLE_ADMIN", "/teacher");
+        $teacherManager = new TeacherManager();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $error = false;
+            if (!$_POST["offer_id"]) {
+                $error = true;
+                $this->addFlash("color-danger", "il est obligatoire de choisir une lesson");
+            }
+            $teacher = $teacherManager->selectOneById($_POST["teacher_id"]);
+            if (!$teacher) {
+                $error = true;
+                $this->addFlash("color-danger", "il y a un problème avec l'identification du prof, veuillez recommencer la procédure");
+                $this->redirectTo("/teacher");
+            }
+            if (!$error) {
+                $offerManager = new OfferManager();
+                if ($offerManager->delete($_POST["offer_id"])) {
+                    $this->addFlash("color-success", "le cours a été correctement retiré");
+                } else {
+                    $this->addFlash("color-danger", "il y a eu un problème lors du déassignation du cours");
+                }
+
+                $this->redirectTo("/teacher/show/$teacherId");
+            }
+        }
+        $teacher = $teacherManager->selectOneById($teacherId);
+
+        $lessons = $teacherManager->findLessonsforTeacher($teacherId);
+        return $this->twig->render('Teacher/dellesson.html.twig', [
+            "teacher" => $teacher,
+            "lessons" => $lessons,
+        ]);
+    }
 }
