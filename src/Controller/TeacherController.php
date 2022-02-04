@@ -345,7 +345,12 @@ class TeacherController extends AbstractController
 
         $assistManager = new AssistManager();
         $assists = $assistManager->findAllForTeacher($id);
-        var_dump($assists);
-        die;
+        $archiveAssists = $assistManager->findAllForTeacherArchive($id);
+        // var_dump($assists);
+        // die;
+        return $this->twig->render('Teacher/board.html.twig', [
+            "assists" => $assists,
+            'archiveAssists' => $archiveAssists,
+        ]);
     }
 }

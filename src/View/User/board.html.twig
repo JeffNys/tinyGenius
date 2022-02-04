@@ -1,0 +1,79 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Cours prévus{% endblock %}
+
+{% block content %}
+    <h1>Liste des cours prévus</h1>
+    
+    <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">date</th>
+        <th scope="col">heure</th>
+        <th scope="col">cours</th>
+        <th scope="col">niveau</th>
+        <th scope="col">prof</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for assist in assists %}
+        <tr>
+            <td>{{ assist.date_meet }}</td>
+            <td>{{ assist.hour_meet }}</td>
+            <td>{{ assist.lesson_name }}</td>
+            <td>{{ assist.level }}</td>
+            <td>{{ assist.title }}</td>
+            <td><a class="btn btn-secondary" href="/teacher/show/{{ assist.teacher_id }}">Détails du prof</a></td>
+        </tr>
+        {% else %}
+        <tr>
+        <td>Pas de cours prévu à l'avenir</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+    <div class="accordion accordion-flush" id="spoiler">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="spoiler1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#control-spoiler-1" aria-expanded="false" aria-controls="control-spoiler-1">
+                Archive : Cours passés
+            </button>
+            </h2>
+            <div id="control-spoiler-1" class="accordion-collapse collapse" aria-labelledby="spoiler1" data-bs-parent="#spoiler">
+            <div class="accordion-body">
+            <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">date</th>
+        <th scope="col">heure</th>
+        <th scope="col">cours</th>
+        <th scope="col">niveau</th>
+        <th scope="col">Elève</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for assist in archiveAssists %}
+        <tr>
+            <td>{{ assist.date_meet }}</td>
+            <td>{{ assist.hour_meet }}</td>
+            <td>{{ assist.lesson_name }}</td>
+            <td>{{ assist.level }}</td>
+            <td>{{ assist.title }}</td>
+            <td><a class="btn btn-secondary" href="/teacher/show/{{ assist.teacher_id }}">Détails du prof</a></td>
+        </tr>
+        {% else %}
+        <tr>
+        <td>Pas encore de cours</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+            
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

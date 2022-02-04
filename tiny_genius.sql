@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `title` VARCHAR(125) NOT NULL,
-  `message` VARCHAR(45) NULL,
+  `message` LONGTEXT NULL,
   `message_date` DATE NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_message_user`
