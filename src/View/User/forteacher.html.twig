@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Information sur l'élève{% endblock %}
+
+{% block content %}
+    <h1>Elève: {{ user.email }}</h1>
+    <p>Prénom : {{ user.firstname }}</p>
+    <p>Nom : {{ user.lastname }} </p>
+    <p>adresse de courriel : {{ user.email }} </p>
+    <p>Télephone : {{ user.phone }} </p>
+    <p>anniversaire : {{ user.birthday|date("d/m/Y") }} </p>
+    <br>
+
+    <h2>Historique :</h2>
+    <ul>
+        {% for info in infos %}
+            <a href="/message/show/{{ info.id }}"><li>{{ info.title }} - {{ info.date }}</li></a>
+        {% else %}
+            <li>pas de messages</li>
+        {% endfor %}
+        
+    </ul>
+    <a class="btn btn-success" href="/message/add/{{ user.id }}">Ajouter une info</a>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Détails du message{% endblock %}
+
+{% block content %}
+    <h1>message pour: {{ user.firstname }} {{ user.lastname }}</h1>
+    <p>titre du message: {{ message.title }}</p>
+    <p>Contenu du message: {{ message.message }} </p>
+    <p>date du message: {{ message.message_date }}</p>
+    <br>
+    <a href="/message/edit/{{ message.id }}" class="btn btn-warning mt-3 mb-3">Modifier</a>
+    <a href="/message/delete/{{ message.id}}" class="btn btn-danger mt-3 mb-3">supprimer</a>
+    <br>
+    <a href="/user/forteacher/{{ message.user_id }}" class="mt-3">retourner sur l'élève</a>
+{% endblock %}

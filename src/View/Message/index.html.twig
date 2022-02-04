@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Liste des messages{% endblock %}
+
+{% block content %}
+    <h1>Liste des messages</h1>
+    <ul>
+        {% for message in messages %}
+            <li><a href="/message/show/{{ message.id }}">{{ message.id }}. {{ message.message }}</a></li>
+        {% else %}
+            <li>Aucun message enregistré</li>
+        {% endfor %}
+    </ul>
+    <a href="/message/add" class="btn btn-primary">ajouter un message</a>
+{% endblock %}

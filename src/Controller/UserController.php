@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
-use App\Model\TeacherManager;
 use App\Model\UserManager;
+use App\Model\AssistManager;
+use App\Model\MessageManager;
+use App\Model\TeacherManager;
 use App\Service\UploadService;
 
 /**
@@ -368,6 +370,48 @@ class UserController extends AbstractController
 
         return $this->twig->render('User/add.html.twig', [
             'user' => $user,
+        ]);
+    }
+
+    public function forteacher(int $id)
+    {
+        if (!$this->isGranted("ROLE_ADMIN")) {
+            $this->isGranted("ROLE_TEACHER", "/");
+        }
+
+        $userManager = new UserManager();
+        $user = $userManager->selectOneById($id);
+
+        $messageManager = new MessageManager();
+        $messageCriteria = [
+            "user_id" => $id,
+        ];
+        $messages = $messageManager->findBy($messageCriteria);
+
+        return $this->twig->render('User/forteacher.html.twig', [
+            'user' => $user,
+            'infos' => $messages, // because twig messages is already used by addFlash :-)
+        ]);
+    }
+
+    public function board()
+    {
+        $this->isGranted("ROLE_USER", "/");
+        $id = $_SESSION["user"]["id"];
+        // $teacherCriteria = [
+        //     "user_id" => $id,
+        // ];
+        // $teacherManager = new TeacherManager();
+        // $teachers = $teacherManager->findBy($teacherCriteria);
+
+        $assistManager = new AssistManager();
+        $assists = $assistManager->findAllForUser($id);
+        $archiveAssists = $assistManager->findAllForUserArchive($id);
+        // var_dump($assists);
+        // die;
+        return $this->twig->render('User/board.html.twig', [
+            "assists" => $assists,
+            'archiveAssists' => $archiveAssists,
         ]);
     }
 }
