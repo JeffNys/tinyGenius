@@ -1,0 +1,39 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Réserver un cour{% endblock %}
+
+{% block content %}
+    <h1>Réserver un cour</h1>
+
+    <div class="text-center" >
+    <a class="btn btn-primary" href="/assist/add/{{ offer }}/{{ navWeeks.previousWeek }}">Semaine précédente</a> 
+    <a class="ms-5 btn btn-primary" href="/assist/add/{{ offer }}/{{ navWeeks.nextWeek }}">Semaine suivante</a>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                    <th scope="col">Heure</th>
+                {% set days = calendar.12 %}
+                {% for day in days %}
+                    <th scope="col" class="text-center">{{ day.nameDay }}</th>
+                {% endfor %}
+                    
+            </tr>
+        </thead>
+        <tbody>
+            {% for day in calendar %}
+                <tr>
+                <td scope="row">{{ day.1.hour }}h</td>
+                {% for slot in day %}
+                    {% if slot.availlable %}
+                        <td class="text-center"><a href="/assist/register/{{ slot.date }}/{{ slot.hour }}/{{ slot.user }}/{{ slot.offer }}" class="btn btn-secondary"> {{ slot.numberDay }} <br> {{ slot.nameMonth }}</a></td>
+                    {% else %}
+                        <td class="text-center">{{ slot.numberDay }} <br> {{ slot.nameMonth }}</td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

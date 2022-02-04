@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `assist` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `offer_id` INT NOT NULL,
-  `meet` VARCHAR(45) NOT NULL,
+  `meet` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_assist_user`
     FOREIGN KEY (`user_id`)
