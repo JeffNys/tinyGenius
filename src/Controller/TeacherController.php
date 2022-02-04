@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\AssistManager;
 use App\Model\LessonManager;
 use App\Model\OfferManager;
 use App\Model\UserManager;
@@ -330,5 +331,21 @@ class TeacherController extends AbstractController
             "teacher" => $teacher,
             "lessons" => $lessons,
         ]);
+    }
+
+    public function board()
+    {
+        $this->isGranted("ROLE_TEACHER", "/");
+        $id = $_SESSION["user"]["id"];
+        // $teacherCriteria = [
+        //     "user_id" => $id,
+        // ];
+        // $teacherManager = new TeacherManager();
+        // $teachers = $teacherManager->findBy($teacherCriteria);
+
+        $assistManager = new AssistManager();
+        $assists = $assistManager->findAllForTeacher($id);
+        var_dump($assists);
+        die;
     }
 }
